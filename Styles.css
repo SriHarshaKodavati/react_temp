@@ -1,25 +1,45 @@
-.scroll-container {
-  scroll-behavior: smooth;
-  padding-bottom: 20px;
+.navbar-custom {
+  background-color: #0473ea;
+  color: white;
 }
 
-.scroll-arrow {
-  position: absolute;
-  top: 45%;
-  font-size: 1.8rem;
-  background: white;
-  border-radius: 50%;
-  padding: 8px;
-  z-index: 100;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+.navbar-custom .nav-link,
+.navbar-custom .navbar-brand {
+  color: white !important;
 }
 
-.left-arrow {
-  left: 10px;
+.account-card {
+  border-radius: 12px;
+  border: 2px solid #0473ea;
+  padding: 10px;
+  background-color: #ffffff;
+  transition: transform 0.2s ease;
 }
 
-.right-arrow {
-  right: 10px;
+.account-card:hover {
+  transform: scale(1.03);
 }
-    
+
+.account-title {
+  color: #38d200;
+  font-weight: bold;
+}
+
+.access-btn {
+  background-color: #0473ea;
+  border: none;
+}
+
+.access-btn:hover {
+  background-color: #025cc7;
+}
+
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+/>
