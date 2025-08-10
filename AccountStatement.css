@@ -1,0 +1,43 @@
+
+
+.account-statement-bg {
+  background: #f8fbfd;
+}
+
+.bank-title {
+  color: #0473ea; 
+  letter-spacing: 0.5px;
+  font-weight: bold;
+}
+
+.statement-logo {
+  width: 52px;
+  height: 52px;
+  font-weight: bold;
+  background: linear-gradient(135deg, #0473ea, #15b878);
+  box-shadow: 0 2px 16px rgba(34, 85, 164, 0.1);
+}
+
+.statement-label {
+  font-size: 0.97em;
+  font-weight: 500;
+  color: #0473ea;
+}
+
+.table-primary th {
+  background-color: #0473ea !important; 
+  color: #fff !important;
+}
+
+.statement-table td,
+.statement-table th {
+  vertical-align: middle;
+  font-size: 0.96em;
+}
+
+.statement-footer {
+  border-top: 1px solid #e0eaf7;
+  padding-top: 8px;
+  margin-top: 15px;
+  color: #6c757d !important;
+}

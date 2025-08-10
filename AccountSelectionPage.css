@@ -1,0 +1,103 @@
+/* Navbar */
+.navbar-custom {
+  background-color: #0473ea;
+  color: white;
+}
+
+.navbar-custom .nav-link,
+.navbar-custom .navbar-brand {
+  color: white !important;
+}
+
+/* Account Cards */
+.account-card {
+  border-radius: 12px;
+  border: 2px solid #0473ea;
+  padding: 15px;
+  background-color: #fff;
+  transition: transform 0.2s, border-color 0.2s;
+  height: 100%;
+}
+.account-card:hover,
+.account-card.selected-account-card {
+  transform: scale(1.03);
+  border-color: #38d200;
+  box-shadow: 0 0 0 4px #e2fad1;
+}
+
+/* Title in card */
+.account-title {
+  color: #38d200;
+  font-weight: bold;
+}
+
+/* Button - blue to green accent on selected */
+.access-btn {
+  background-color: #0473ea;
+  border: none;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: background 0.2s;
+}
+.access-btn:hover {
+  background-color: #025cc7;
+}
+.selected-btn, .selected-account-card .access-btn {
+  background-color: #38d200 !important;
+  color: #fff !important;
+}
+
+/* Carousel Arrow Customization for visibility */
+.slick-arrow {
+  z-index: 2;
+}
+.slick-prev, .slick-next {
+  width: 46px;
+  height: 46px;
+  background: #38d200 !important;
+  color: #fff !important;
+  opacity: 1 !important;
+  border-radius: 50%;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(34,214,0,0.12);
+}
+.slick-prev:hover, .slick-next:hover {
+  background: #0473ea !important;
+}
+.slick-prev:before, .slick-next:before {
+  font-size: 28px;
+  color: #fff !important;
+  opacity: 1;
+}
+.slick-prev { left: -25px; }
+.slick-next { right: -25px; }
+
+/* Responsive: tighten arrow overlap for mobile */
+@media (max-width: 576px) {
+  .slick-prev, .slick-next {
+    width: 38px;
+    height: 38px;
+  }
+  .slick-prev { left: -18px; }
+  .slick-next { right: -18px; }
+}
+
+/* Footer */
+.footer-custom {
+  background-color: #f8f9fa;
+  color: #333;
+  border-top: 1px solid #ddd;
+  margin-top: 60px;
+}
+
+/* Welcome highlight */
+.text-green {
+  color: #38d200;
+}
+
+/* Fix any overflow issues */
+body {
+  overflow-x: hidden;
+}
