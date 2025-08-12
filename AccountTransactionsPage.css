@@ -88,3 +88,10 @@
     font-size: 0.85rem;
   }
 }
+
+<Route path="/transactions" element={<AccountTransactionsPage />} />
+
+<button className="btn btn-primary" variant="primary" onClick={() => navigate("/transactions", { state: { account: accountData } })}>
+                View All Transactions
+            </button>
+
