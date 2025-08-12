@@ -1,0 +1,90 @@
+/* src/components/AccountTransactionsPage.css */
+
+/* Container background & rounded edge feel */
+.bg-white {
+  background-color: #ffffff !important;
+}
+
+/* Table styling */
+.table-primary th {
+  background-color: #2255a4 !important; /* Brand blue */
+  color: #fff !important;
+}
+
+.table-bordered {
+  border: 1px solid #dee2e6;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+  font-size: 0.95rem;
+}
+
+/* Badges for Credit/Debit Rows */
+.badge.bg-success {
+  background-color: #38d200 !important; /* Brand green for Credits */
+}
+
+.badge.bg-danger {
+  background-color: #dc3545 !important; /* Red for Debits */
+}
+
+/* Filters panel styling */
+.bg-light {
+  background-color: #f8f9fa !important;
+}
+
+.form-label {
+  font-weight: 500;
+}
+
+.form-control,
+.form-select {
+  font-size: 0.9rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.25rem;
+}
+
+/* Buttons */
+.btn-info {
+  background-color: #17a2b8;
+  border: none;
+}
+
+.btn-info:hover {
+  background-color: #138496;
+}
+
+/* Modal Styling */
+.modal-header {
+  background-color: #2255a4;
+  color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.modal-title {
+  font-size: 1.2rem;
+}
+
+.modal-body p {
+  margin-bottom: 0.5rem;
+}
+
+/* Hover effect on table rows */
+.table tbody tr:hover {
+  background-color: #f1f5fa;
+  cursor: pointer;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .table td,
+  .table th {
+    font-size: 0.85rem;
+  }
+  
+  .form-label {
+    font-size: 0.85rem;
+  }
+}
