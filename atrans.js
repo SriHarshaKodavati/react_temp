@@ -191,30 +191,54 @@ const AccountTransactionsPage = () => {
           </Button>
         </div>
 
-        {/* Balance Summary */}
+        {/* Interactive Balance Summary */}
         <div className="row g-3 mb-4">
           <div className="col-md-3">
-            <div className="summary-card opening">
+            <div 
+              className="summary-card opening"
+              onClick={() => setSortOrder(sortOrder === "Oldest" ? "Newest" : "Oldest")}
+            >
               <div className="summary-label">Opening Balance</div>
               <div className="summary-amount">{openingBalance}</div>
+              <div className="summary-hint">
+                <small className="text-muted">Click to sort</small>
+              </div>
             </div>
           </div>
           <div className="col-md-3">
-            <div className="summary-card closing">
+            <div 
+              className="summary-card closing"
+              onClick={() => setSortOrder(sortOrder === "Oldest" ? "Newest" : "Oldest")}
+            >
               <div className="summary-label">Closing Balance</div>
               <div className="summary-amount">{closingBalance}</div>
+              <div className="summary-hint">
+                <small className="text-muted">Click to sort</small>
+              </div>
             </div>
           </div>
           <div className="col-md-3">
-            <div className="summary-card credits">
+            <div 
+              className="summary-card credits"
+              onClick={() => setTxnType(txnType === "Credit" ? "All" : "Credit")}
+            >
               <div className="summary-label">Total Credits ({summaryStats.creditCount})</div>
               <div className="summary-amount">{summaryStats.totalCredits}</div>
+              <div className="summary-hint">
+                <small className="text-muted">Click to filter</small>
+              </div>
             </div>
           </div>
           <div className="col-md-3">
-            <div className="summary-card debits">
+            <div 
+              className="summary-card debits"
+              onClick={() => setTxnType(txnType === "Debit" ? "All" : "Debit")}
+            >
               <div className="summary-label">Total Debits ({summaryStats.debitCount})</div>
               <div className="summary-amount">{summaryStats.totalDebits}</div>
+              <div className="summary-hint">
+                <small className="text-muted">Click to filter</small>
+              </div>
             </div>
           </div>
         </div>
@@ -316,7 +340,7 @@ const AccountTransactionsPage = () => {
               <table className="table table-bordered align-middle">
                 <thead className="table-primary">
                   <tr>
-                    <th>Date</th>
+                    <th>Date <small className="text-white-50">(dd-mm-yy)</small></th>
                     <th>Description</th>
                     <th>Reference</th>
                     <th>Type</th>
@@ -327,12 +351,11 @@ const AccountTransactionsPage = () => {
                 </thead>
                 <tbody>
                   {paginatedTransactions.map((txn, index) => (
-                    <tr key={index} className="transaction-row">
+                    <tr key={index} className="transaction-row" onClick={() => setSelectedTxn(txn)}>
                       <td>
                         <div>{formatDate(txn.date)}</div>
-                        <small className="text-muted">dd-mm-yy</small>
                       </td>
-                      <td>{txn.description}</td>
+                      <td className="description-hover">{txn.description}</td>
                       <td>{txn.reference}</td>
                       <td>
                         <span className={`badge bg-${txn.type === "Credit" ? "success" : "danger"}`}>
@@ -347,7 +370,10 @@ const AccountTransactionsPage = () => {
                         <Button
                           size="sm"
                           variant="info"
-                          onClick={() => setSelectedTxn(txn)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedTxn(txn);
+                          }}
                         >
                           View
                         </Button>
@@ -389,7 +415,7 @@ const AccountTransactionsPage = () => {
           {selectedTxn && (
             <div className="transaction-details">
               <div className="detail-row">
-                <strong>Date:</strong> {formatDate(selectedTxn.date)} <small className="text-muted">(dd-mm-yy)</small>
+                <strong>Date:</strong> {formatDate(selectedTxn.date)}
               </div>
               <div className="detail-row">
                 <strong>Description:</strong> {selectedTxn.description}
