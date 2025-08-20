@@ -1,4 +1,114 @@
-// src/components/AccountTransactionsPage.js
+{/* Filters */}
+        <div className="row g-3 p-3 bg-light border rounded mb-4">
+          <div className="col-md-2">
+            <label className="form-label">From Date</label>
+            <input 
+              type="date" 
+              className="form-control" 
+              value={fromDate} 
+              onChange={(e) => setFromDate(e.target.value)} 
+            />
+            <small className="text-muted">dd-mm-yy</small>
+          </div>
+          <div className="col-md-2">
+            <label className="form-label">To Date</label>
+            <input 
+              type="date" 
+              className="form-control" 
+              value={toDate} 
+              onChange={(e) => setToDate(e.target.value)} 
+            />
+            <small className="text-muted">dd-mm-yy</small>
+          </div>
+          <div className="col-md-2">
+            <label className="form-label">Type</label>
+            <select 
+              className="form-select" 
+              value={txnType} 
+              onChange={(e) => setTxnType(e.target.value)}
+            >
+              <option value="All">All</option>
+              <option value="Credit">Credit</option>
+              <option value="Debit">Debit</option>
+            </select>
+          </div>
+          <div className="col-md-2">
+            <label className="form-label">Sort</label>
+            <select 
+              className="form-select" 
+              value={sortOrder} 
+              onChange={(e) => setSortOrder(e.target.value)}
+            >
+              <option value="Newest">Newest First</option>
+              <option value="Oldest">Oldest First</option>
+            </select>
+          </div>
+          <div className="col-md-2">
+            <label className="form-label">Search</label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Description/Reference"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <div className="col-md-2">
+            <label className="form-label">Show</label>
+            <select
+              className="form-select"
+              value={pageSize}
+              onChange={(e) => {
+                setPageSize(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+            >
+              <option value={10}>10 per page</option>
+              <option value={25}>25 per page</option>
+              <option value={50}>50 per page</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <div className="d-flex gap-2">
+            <button 
+              className="btn btn-outline-primary btn-sm"
+              onClick={() => {
+                setFromDate(defaultFrom);
+                setToDate(defaultTo);
+                setTxnType("All");
+                setSortOrder("Newest");
+                setSearchTerm("");
+                setCurrentPage(1);
+              }}
+            >
+              Reset Filters
+            </button>
+            <button 
+              className="btn btn-outline-success btn-sm"
+              onClick={() => {
+                // This would trigger export functionality
+                alert('Export functionality would be implemented here');
+              }}
+            >
+              Export to Excel
+            </button>
+            <button 
+              className="btn btn-outline-info btn-sm"
+              onClick={() => {
+                // This would trigger print functionality
+                window.print();
+              }}
+            >
+              Print Report
+            </button>
+          </div>
+          <div className="text-muted small">
+            Last updated: {formatDate(new Date().toISOString())}
+          </div>
+        </div>// src/components/AccountTransactionsPage.js
 import React, { useState, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
@@ -389,17 +499,48 @@ const AccountTransactionsPage = () => {
           </>
         )}
 
-        {/* Footer */}
-        <div className="d-flex justify-content-between mt-4 pt-3 border-top">
-          <Button variant="secondary" onClick={() => navigate("/statement", { state: { account: accountData } })}>
-            Back to Statement
-          </Button>
-          <div>
-            <Button variant="outline-primary" className="me-2">
-              Export Data
+        {/* Enhanced Footer */}
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 pt-3 border-top">
+          <div className="d-flex gap-2 mb-2 mb-md-0">
+            <Button variant="secondary" onClick={() => navigate("/statement", { state: { account: accountData } })}>
+              Back to Statement
             </Button>
-            <Button variant="primary">
-              Print Report
+            <Button 
+              variant="outline-primary"
+              onClick={() => {
+                const today = new Date();
+                const lastMonth = new Date(today.setMonth(today.getMonth() - 1));
+                setFromDate(lastMonth.toISOString().split('T')[0]);
+                setToDate(new Date().toISOString().split('T')[0]);
+              }}
+            >
+              Last 30 Days
+            </Button>
+          </div>
+          <div className="d-flex gap-2">
+            <Button 
+              variant="outline-success" 
+              onClick={() => alert('Email functionality would be implemented here')}
+            >
+              Email Statement
+            </Button>
+            <Button 
+              variant="outline-info"
+              onClick={() => alert('Download PDF functionality would be implemented here')}
+            >
+              Download PDF
+            </Button>
+            <Button 
+              variant="primary"
+              onClick={() => {
+                const chequeBooks = filteredTransactions.filter(txn => 
+                  txn.description.toLowerCase().includes('cheque') || 
+                  txn.description.toLowerCase().includes('chq')
+                );
+                alert(`Found ${chequeBooks.length} cheque transactions`);
+              }}
+            >
+              Cheque Book
             </Button>
           </div>
         </div>
