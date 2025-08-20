@@ -27,7 +27,7 @@
 }
 
 .badge.bg-danger {
-  background-color: #dc3545 !important; /* Red for Debits */
+  background-color: #38d200 !important; /* Use green for consistency */
 }
 
 .badge.bg-primary {
@@ -35,7 +35,7 @@
 }
 
 .badge.bg-info {
-  background-color: #17a2b8 !important;
+  background-color: #0473ea !important;
 }
 
 /* Filters panel styling */
@@ -116,7 +116,7 @@
 }
 
 .summary-card.closing {
-  border-left-color: #15b878;
+  border-left-color: #0473ea;
 }
 
 .summary-card.credits {
@@ -124,7 +124,7 @@
 }
 
 .summary-card.debits {
-  border-left-color: #dc3545;
+  border-left-color: #38d200;
 }
 
 .summary-label {
@@ -150,7 +150,7 @@
 }
 
 .summary-card.closing .summary-amount {
-  color: #15b878;
+  color: #0473ea;
 }
 
 .summary-card.credits .summary-amount {
@@ -158,19 +158,18 @@
 }
 
 .summary-card.debits .summary-amount {
-  color: #dc3545;
+  color: #38d200;
 }
 
-/* Interactive Transaction Rows */
+/* Interactive Transaction Rows - Fixed to prevent jiggling */
 .transaction-row {
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease;
   cursor: pointer;
 }
 
 .transaction-row:hover {
   background-color: #f8fbfd;
-  transform: scale(1.01);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  /* Removed transform and box-shadow to prevent jiggling */
 }
 
 .description-hover {
@@ -208,12 +207,11 @@
   border-bottom: none;
 }
 
-/* Hover effect on table rows - Enhanced */
+/* Hover effect on table rows - Enhanced but fixed */
 .table tbody tr:hover {
   background-color: #f1f5fa;
   cursor: pointer;
-  transform: scale(1.01);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  /* Removed transform and box-shadow to prevent jiggling */
 }
 
 /* Buttons with Enhanced Interactions */
@@ -224,30 +222,30 @@
 }
 
 .btn-primary:hover {
-  background-color: #0358c7;
-  border-color: #0358c7;
+  background-color: #0473ea;
+  border-color: #0473ea;
   transform: translateY(-1px);
 }
 
 .btn-info {
-  background-color: #17a2b8;
+  background-color: #0473ea;
   border: none;
   transition: all 0.2s ease;
 }
 
 .btn-info:hover {
-  background-color: #138496;
+  background-color: #0473ea;
   transform: scale(1.05);
 }
 
 .btn-success {
-  background-color: #15b878;
-  border-color: #15b878;
+  background-color: #38d200;
+  border-color: #38d200;
 }
 
 .btn-success:hover {
-  background-color: #12a068;
-  border-color: #12a068;
+  background-color: #38d200;
+  border-color: #38d200;
 }
 
 .btn-outline-primary {
