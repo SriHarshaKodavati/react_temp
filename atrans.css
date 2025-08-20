@@ -97,12 +97,18 @@
   padding: 1rem;
   border-left: 4px solid;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
 }
 
 .summary-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.summary-card:active {
+  transform: translateY(-1px);
 }
 
 .summary-card.opening {
@@ -132,6 +138,11 @@
   font-size: 1.1rem;
   font-weight: bold;
   color: #2c3e50;
+  margin-bottom: 0.25rem;
+}
+
+.summary-hint {
+  margin-top: 0.25rem;
 }
 
 .summary-card.opening .summary-amount {
@@ -148,6 +159,27 @@
 
 .summary-card.debits .summary-amount {
   color: #dc3545;
+}
+
+/* Interactive Transaction Rows */
+.transaction-row {
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.transaction-row:hover {
+  background-color: #f8fbfd;
+  transform: scale(1.01);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.description-hover {
+  transition: color 0.2s ease;
+}
+
+.transaction-row:hover .description-hover {
+  color: #0473ea;
+  font-weight: 500;
 }
 
 /* Modal Styling */
@@ -176,14 +208,54 @@
   border-bottom: none;
 }
 
-/* Hover effect on table rows */
+/* Hover effect on table rows - Enhanced */
 .table tbody tr:hover {
   background-color: #f1f5fa;
   cursor: pointer;
+  transform: scale(1.01);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.transaction-row {
-  transition: background-color 0.2s ease;
+/* Buttons with Enhanced Interactions */
+.btn-primary {
+  background-color: #0473ea;
+  border-color: #0473ea;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0358c7;
+  border-color: #0358c7;
+  transform: translateY(-1px);
+}
+
+.btn-info {
+  background-color: #17a2b8;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.btn-info:hover {
+  background-color: #138496;
+  transform: scale(1.05);
+}
+
+.btn-success {
+  background-color: #15b878;
+  border-color: #15b878;
+}
+
+.btn-success:hover {
+  background-color: #12a068;
+  border-color: #12a068;
+}
+
+.btn-outline-primary {
+  transition: all 0.2s ease;
+}
+
+.btn-outline-primary:hover {
+  transform: translateY(-1px);
 }
 
 /* Responsive tweaks */
