@@ -32,6 +32,8 @@ const AccountStatement = () => {
   const [txnType, setTxnType] = useState("All");
   const [selectedTxn, setSelectedTxn] = useState(null);
   const [viewMode, setViewMode] = useState("recent"); // "recent", "last50", "all", "filtered"
+  const [showFilters, setShowFilters] = useState(false);
+  const [animateCards, setAnimateCards] = useState(false);
 
   // Calculate opening and closing balances for selected period
   const { openingBalance, closingBalance, filteredTransactions } = useMemo(() => {
@@ -120,7 +122,7 @@ const AccountStatement = () => {
     <div className="container my-4">
       <div className="account-statement-bg rounded shadow p-4">
 
-        {/* Header */}
+        {/* Header with Interactive Elements */}
         <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between border-bottom pb-3 mb-4">
           <div>
             <h2 className="bank-title">{company}</h2>
@@ -128,9 +130,15 @@ const AccountStatement = () => {
               Statement ({accountType} Account)
             </div>
           </div>
-          <div className="mt-3 mt-md-0">
+          <div className="mt-3 mt-md-0 d-flex gap-2">
+            <button 
+              className="btn btn-outline-primary btn-sm"
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              {showFilters ? 'Hide' : 'Show'} Filters
+            </button>
             <span className="badge bg-success fs-6">
-              Original Period: {formatDate(statementRange.from)} to {formatDate(statementRange.to)}
+              Period: {formatDate(statementRange.from)} to {formatDate(statementRange.to)}
             </span>
           </div>
         </div>
@@ -144,88 +152,114 @@ const AccountStatement = () => {
             <div className="col-md-2"><strong>MICR:</strong> {micr}</div>
             <div className="col-md-3"><strong>Nomination:</strong> {nomination}</div>
             <div className="col-md-3 text-success"><strong>Balance:</strong> {currentBalance}</div>
-            <div className="col-md-3"><strong>As on:</strong> {formatDate(asOnDate)} <small className="text-muted">(dd-mm-yy)</small></div>
+            <div className="col-md-3"><strong>As on:</strong> {formatDate(asOnDate)}</div>
           </div>
         </div>
 
-        {/* Balance Summary */}
+        {/* Interactive Balance Summary */}
         <div className="row g-3 mb-4">
           <div className="col-md-3">
-            <div className="balance-summary-card opening">
+            <div 
+              className="balance-summary-card opening"
+              onClick={() => setAnimateCards(!animateCards)}
+            >
               <div className="balance-label">Opening Balance</div>
               <div className="balance-amount">{openingBalance}</div>
+              <div className="balance-trend">
+                <small className="text-muted">Start of period</small>
+              </div>
             </div>
           </div>
           <div className="col-md-3">
-            <div className="balance-summary-card closing">
+            <div 
+              className="balance-summary-card closing"
+              onClick={() => setAnimateCards(!animateCards)}
+            >
               <div className="balance-label">Closing Balance</div>
               <div className="balance-amount">{closingBalance}</div>
+              <div className="balance-trend">
+                <small className="text-muted">End of period</small>
+              </div>
             </div>
           </div>
           <div className="col-md-3">
-            <div className="balance-summary-card credits">
+            <div 
+              className="balance-summary-card credits"
+              onClick={() => setTxnType(txnType === "Credit" ? "All" : "Credit")}
+            >
               <div className="balance-label">Total Credits ({summaryStats.creditCount})</div>
               <div className="balance-amount">{summaryStats.totalCredits}</div>
+              <div className="balance-trend">
+                <small className="text-muted">Click to filter</small>
+              </div>
             </div>
           </div>
           <div className="col-md-3">
-            <div className="balance-summary-card debits">
+            <div 
+              className="balance-summary-card debits"
+              onClick={() => setTxnType(txnType === "Debit" ? "All" : "Debit")}
+            >
               <div className="balance-label">Total Debits ({summaryStats.debitCount})</div>
               <div className="balance-amount">{summaryStats.totalDebits}</div>
+              <div className="balance-trend">
+                <small className="text-muted">Click to filter</small>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Filters */}
-        <div className="bg-white p-3 rounded border mb-4">
-          <div className="row align-items-end g-3">
-            <div className="col-md-3">
-              <label className="form-label">From Date</label>
-              <input
-                type="date"
-                className="form-control"
-                value={fromDate}
-                onChange={(e) => setFromDate(e.target.value)}
-              />
-              <small className="text-muted">Format: dd-mm-yy</small>
-            </div>
-            <div className="col-md-3">
-              <label className="form-label">To Date</label>
-              <input
-                type="date"
-                className="form-control"
-                value={toDate}
-                onChange={(e) => setToDate(e.target.value)}
-              />
-              <small className="text-muted">Format: dd-mm-yy</small>
-            </div>
-            <div className="col-md-3">
-              <label className="form-label">Transaction Type</label>
-              <select
-                className="form-select"
-                value={txnType}
-                onChange={(e) => setTxnType(e.target.value)}
-              >
-                <option value="All">All</option>
-                <option value="Credit">Credit</option>
-                <option value="Debit">Debit</option>
-              </select>
-            </div>
-            <div className="col-md-3">
-              <label className="form-label">View Mode</label>
-              <select
-                className="form-select"
-                value={viewMode}
-                onChange={(e) => setViewMode(e.target.value)}
-              >
-                <option value="recent">Last 5 Transactions</option>
-                <option value="last50">Last 50 Transactions</option>
-                <option value="all">All Transactions</option>
-                <option value="filtered">Filtered Period</option>
-              </select>
+        {/* Collapsible Filters */}
+        {showFilters && (
+          <div className="bg-white p-3 rounded border mb-4 filter-slide-in">
+            <div className="row align-items-end g-3">
+              <div className="col-md-3">
+                <label className="form-label">From Date</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  value={fromDate}
+                  onChange={(e) => setFromDate(e.target.value)}
+                />
+                <small className="text-muted">Format: dd-mm-yy</small>
+              </div>
+              <div className="col-md-3">
+                <label className="form-label">To Date</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  value={toDate}
+                  onChange={(e) => setToDate(e.target.value)}
+                />
+                <small className="text-muted">Format: dd-mm-yy</small>
+              </div>
+              <div className="col-md-3">
+                <label className="form-label">Transaction Type</label>
+                <select
+                  className="form-select"
+                  value={txnType}
+                  onChange={(e) => setTxnType(e.target.value)}
+                >
+                  <option value="All">All</option>
+                  <option value="Credit">Credit</option>
+                  <option value="Debit">Debit</option>
+                </select>
+              </div>
+              <div className="col-md-3">
+                <label className="form-label">View Mode</label>
+                <select
+                  className="form-select"
+                  value={viewMode}
+                  onChange={(e) => setViewMode(e.target.value)}
+                >
+                  <option value="recent">Last 5 Transactions</option>
+                  <option value="last50">Last 50 Transactions</option>
+                  <option value="all">All Transactions</option>
+                  <option value="filtered">Filtered Period</option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Transactions */}
         <h5 className="mb-3 text-primary">
@@ -243,9 +277,9 @@ const AccountStatement = () => {
         ) : (
           <div className="table-responsive">
             <table className="table table-bordered align-middle statement-table">
-              <thead className="table-primary">
+                              <thead className="table-primary">
                 <tr>
-                  <th>Date</th>
+                  <th>Date <small className="text-white-50">(dd-mm-yy)</small></th>
                   <th>Description</th>
                   <th>Reference</th>
                   <th>Type</th>
@@ -259,7 +293,6 @@ const AccountStatement = () => {
                   <tr key={index} className="transaction-row">
                     <td>
                       <div>{formatDate(txn.date)}</div>
-                      <small className="text-muted">dd-mm-yy</small>
                     </td>
                     <td>{txn.description}</td>
                     <td>{txn.reference}</td>
@@ -310,7 +343,7 @@ const AccountStatement = () => {
           {selectedTxn && (
             <div className="transaction-details">
               <div className="detail-row">
-                <strong>Date:</strong> {formatDate(selectedTxn.date)} <small className="text-muted">(dd-mm-yy)</small>
+                <strong>Date:</strong> {formatDate(selectedTxn.date)}
               </div>
               <div className="detail-row">
                 <strong>Description:</strong> {selectedTxn.description}
