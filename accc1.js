@@ -34,6 +34,8 @@ const AccountStatement = () => {
   const [viewMode, setViewMode] = useState("recent"); // "recent", "last50", "all", "filtered"
   const [showFilters, setShowFilters] = useState(false);
   const [animateCards, setAnimateCards] = useState(false);
+  const [quickFilter, setQuickFilter] = useState("");
+  const [showDownloadOptions, setShowDownloadOptions] = useState(false);
 
   // Calculate opening and closing balances for selected period
   const { openingBalance, closingBalance, filteredTransactions } = useMemo(() => {
@@ -44,8 +46,9 @@ const AccountStatement = () => {
 
       const dateMatch = (!from || txnDate >= from) && (!to || txnDate <= to);
       const typeMatch = txnType === "All" ? true : txn.type.toLowerCase() === txnType.toLowerCase();
+      const searchMatch = quickFilter === "" || txn.description.toLowerCase().includes(quickFilter.toLowerCase());
 
-      return dateMatch && typeMatch;
+      return dateMatch && typeMatch && searchMatch;
     });
 
     // Sort by date (newest first)
@@ -80,7 +83,7 @@ const AccountStatement = () => {
     }
 
     return { openingBalance: opening, closingBalance: closing, filteredTransactions: filtered };
-  }, [fromDate, toDate, txnType, viewMode, initialTransactions]);
+  }, [fromDate, toDate, txnType, viewMode, quickFilter, initialTransactions]);
 
   // Calculate summary stats
   const summaryStats = useMemo(() => {
@@ -130,7 +133,22 @@ const AccountStatement = () => {
               Statement ({accountType} Account)
             </div>
           </div>
-          <div className="mt-3 mt-md-0 d-flex gap-2">
+          <div className="mt-3 mt-md-0 d-flex gap-2 align-items-center">
+            <div className="dropdown">
+              <button 
+                className="btn btn-outline-success btn-sm dropdown-toggle"
+                onClick={() => setShowDownloadOptions(!showDownloadOptions)}
+              >
+                Download
+              </button>
+              {showDownloadOptions && (
+                <div className="dropdown-menu show">
+                  <button className="dropdown-item">PDF Statement</button>
+                  <button className="dropdown-item">Excel Format</button>
+                  <button className="dropdown-item">CSV Format</button>
+                </div>
+              )}
+            </div>
             <button 
               className="btn btn-outline-primary btn-sm"
               onClick={() => setShowFilters(!showFilters)}
@@ -211,8 +229,8 @@ const AccountStatement = () => {
         {/* Collapsible Filters */}
         {showFilters && (
           <div className="bg-white p-3 rounded border mb-4 filter-slide-in">
-            <div className="row align-items-end g-3">
-              <div className="col-md-3">
+            <div className="row g-3 align-items-end">
+              <div className="col-md-2">
                 <label className="form-label">From Date</label>
                 <input
                   type="date"
@@ -222,7 +240,7 @@ const AccountStatement = () => {
                 />
                 <small className="text-muted">Format: dd-mm-yy</small>
               </div>
-              <div className="col-md-3">
+              <div className="col-md-2">
                 <label className="form-label">To Date</label>
                 <input
                   type="date"
@@ -232,7 +250,7 @@ const AccountStatement = () => {
                 />
                 <small className="text-muted">Format: dd-mm-yy</small>
               </div>
-              <div className="col-md-3">
+              <div className="col-md-2">
                 <label className="form-label">Transaction Type</label>
                 <select
                   className="form-select"
@@ -244,7 +262,7 @@ const AccountStatement = () => {
                   <option value="Debit">Debit</option>
                 </select>
               </div>
-              <div className="col-md-3">
+              <div className="col-md-2">
                 <label className="form-label">View Mode</label>
                 <select
                   className="form-select"
@@ -256,6 +274,30 @@ const AccountStatement = () => {
                   <option value="all">All Transactions</option>
                   <option value="filtered">Filtered Period</option>
                 </select>
+              </div>
+              <div className="col-md-2">
+                <label className="form-label">Quick Search</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Description"
+                  value={quickFilter}
+                  onChange={(e) => setQuickFilter(e.target.value)}
+                />
+              </div>
+              <div className="col-md-2">
+                <button 
+                  className="btn btn-outline-secondary w-100"
+                  onClick={() => {
+                    setFromDate(initialFrom);
+                    setToDate(initialTo);
+                    setTxnType("All");
+                    setViewMode("recent");
+                    setQuickFilter("");
+                  }}
+                >
+                  Reset
+                </button>
               </div>
             </div>
           </div>
@@ -334,37 +376,72 @@ const AccountStatement = () => {
 
       </div>
 
-      {/* Transaction Detail Modal */}
-      <Modal show={!!selectedTxn} onHide={() => setSelectedTxn(null)} centered>
+      {/* Enhanced Transaction Detail Modal */}
+      <Modal show={!!selectedTxn} onHide={() => setSelectedTxn(null)} centered size="lg">
         <Modal.Header closeButton>
           <Modal.Title>Transaction Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {selectedTxn && (
             <div className="transaction-details">
-              <div className="detail-row">
-                <strong>Date:</strong> {formatDate(selectedTxn.date)}
+              <div className="row">
+                <div className="col-md-6">
+                  <div className="detail-row">
+                    <strong>Date:</strong> {formatDate(selectedTxn.date)}
+                  </div>
+                  <div className="detail-row">
+                    <strong>Description:</strong> {selectedTxn.description}
+                  </div>
+                  <div className="detail-row">
+                    <strong>Reference:</strong> {selectedTxn.reference}
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="detail-row">
+                    <strong>Type:</strong> 
+                    <span className={`badge bg-${selectedTxn.type === "Credit" ? "success" : "danger"} ms-2`}>
+                      {selectedTxn.type}
+                    </span>
+                  </div>
+                  <div className="detail-row">
+                    <strong>Amount:</strong> 
+                    <span className={`fw-bold ms-2 ${selectedTxn.type === "Credit" ? "text-success" : "text-danger"}`}>
+                      {selectedTxn.amount}
+                    </span>
+                  </div>
+                  <div className="detail-row">
+                    <strong>Balance After:</strong> {selectedTxn.balance}
+                  </div>
+                </div>
               </div>
-              <div className="detail-row">
-                <strong>Description:</strong> {selectedTxn.description}
+              
+              {/* Additional Banking Information */}
+              <div className="mt-3 pt-3 border-top">
+                <div className="row">
+                  <div className="col-md-6">
+                    <small className="text-muted">
+                      <strong>Transaction ID:</strong> TXN{Math.random().toString(36).substr(2, 9).toUpperCase()}
+                    </small>
+                  </div>
+                  <div className="col-md-6">
+                    <small className="text-muted">
+                      <strong>Processed:</strong> {formatDate(selectedTxn.date)} at {new Date().toLocaleTimeString()}
+                    </small>
+                  </div>
+                </div>
               </div>
-              <div className="detail-row">
-                <strong>Reference:</strong> {selectedTxn.reference}
-              </div>
-              <div className="detail-row">
-                <strong>Type:</strong> 
-                <span className={`badge bg-${selectedTxn.type === "Credit" ? "success" : "danger"} ms-2`}>
-                  {selectedTxn.type}
-                </span>
-              </div>
-              <div className="detail-row">
-                <strong>Amount:</strong> 
-                <span className={`fw-bold ms-2 ${selectedTxn.type === "Credit" ? "text-success" : "text-danger"}`}>
-                  {selectedTxn.amount}
-                </span>
-              </div>
-              <div className="detail-row">
-                <strong>Balance After:</strong> {selectedTxn.balance}
+              
+              {/* Action Buttons */}
+              <div className="mt-3 pt-3 border-top d-flex gap-2">
+                <button className="btn btn-outline-primary btn-sm">
+                  Download Receipt
+                </button>
+                <button className="btn btn-outline-success btn-sm">
+                  Email Receipt
+                </button>
+                <button className="btn btn-outline-info btn-sm">
+                  Dispute Transaction
+                </button>
               </div>
             </div>
           )}
