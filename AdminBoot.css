@@ -1,0 +1,195 @@
+/* Import Bootstrap first */
+@import url('bootstrap/dist/css/bootstrap.min.css');
+
+/* Minimal custom CSS - only what Bootstrap doesn't provide */
+body {
+  font-size: 14px;
+}
+
+.sidebar {
+  width: 240px;
+  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.flex-grow-1 {
+  margin-left: 240px;
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+.upload-area {
+  border: 2px dashed #dee2e6 !important;
+  background-color: #f8f9fa;
+  transition: all 0.2s ease;
+}
+
+.upload-area:hover {
+  border-color: #0d6efd !important;
+  background-color: #f0f9ff;
+}
+
+/* CSV Tooltip */
+.csv-tooltip {
+  position: absolute;
+  top: 25px;
+  left: -150px;
+  z-index: 1000;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  width: 300px;
+}
+
+.csv-tooltip::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 150px;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-bottom: none;
+  border-right: none;
+  transform: rotate(45deg);
+}
+
+.csv-example {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  background: #f8f9fa;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #e9ecef;
+}
+
+.csv-header {
+  font-weight: bold;
+  color: #495057;
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+
+.csv-row {
+  color: #6c757d;
+  margin-bottom: 2px;
+}
+
+/* Amount styling */
+.text-success.fw-bold {
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace !important;
+}
+
+/* Table hover effects */
+.table-hover > tbody > tr:hover > td {
+  background-color: rgba(13, 110, 253, 0.05) !important;
+}
+
+/* Custom badge sizes */
+.fs-7 {
+  font-size: 0.875rem !important;
+}
+
+/* Modal backdrop */
+.modal.show {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Dropdown positioning */
+.dropdown-menu.show {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Button group spacing */
+.btn-group .btn + .btn {
+  margin-left: -1px;
+}
+
+/* Card hover effects */
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.2s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  
+  .flex-grow-1 {
+    margin-left: 0;
+  }
+  
+  .sidebar nav {
+    display: flex;
+    overflow-x: auto;
+    padding: 0.5rem !important;
+  }
+  
+  .sidebar .btn {
+    white-space: nowrap;
+    margin-right: 0.5rem !important;
+    margin-bottom: 0 !important;
+  }
+  
+  .csv-tooltip {
+    left: -100px;
+    width: 250px;
+  }
+  
+  .csv-tooltip::before {
+    left: 100px;
+  }
+}
+
+@media (max-width: 576px) {
+  .csv-tooltip {
+    left: -50px;
+    width: 200px;
+  }
+  
+  .csv-tooltip::before {
+    left: 50px;
+  }
+}
+
+/* Loading animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Focus states */
+.btn:focus,
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25) !important;
+}
