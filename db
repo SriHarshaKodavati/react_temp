@@ -1,0 +1,72 @@
+-- Connect to PostgreSQL
+psql -U postgres
+
+-- Create database
+CREATE DATABASE banking_db;
+
+-- Connect to the database
+\c banking_db;
+
+-- Create accounts table
+CREATE TABLE accounts (
+   id BIGSERIAL PRIMARY KEY,
+   company_name VARCHAR(255),
+   account_number VARCHAR(255) UNIQUE,
+   role VARCHAR(255),
+   department VARCHAR(255),
+   status VARCHAR(255),
+   last_login TIMESTAMP
+);
+
+-- Create account_summaries table
+CREATE TABLE account_summaries (
+   id BIGSERIAL PRIMARY KEY,
+   account_type VARCHAR(255),
+   ifsc VARCHAR(255),
+   micr VARCHAR(255),
+   nomination VARCHAR(255),
+   current_balance DECIMAL(15,2),
+   as_on_date DATE,
+   statement_from DATE,
+   statement_to DATE,
+   account_id BIGINT REFERENCES accounts(id)
+);
+
+-- Create transactions table
+CREATE TABLE transactions (
+   id BIGSERIAL PRIMARY KEY,
+   transaction_date DATE,
+   description VARCHAR(255),
+   reference VARCHAR(255),
+   type VARCHAR(255),
+   amount DECIMAL(15,2),
+   balance DECIMAL(15,2),
+   account_summary_id BIGINT REFERENCES account_summaries(id)
+);
+
+-- Insert sample data into accounts
+INSERT INTO accounts (company_name, account_number, role, department, status, last_login) VALUES
+('ABC Tech Ltd.', '1234567890', 'Manager', 'Finance', 'Active', '2025-08-05 10:30:00'),
+('XYZ Corp.', '9876543210', 'Employee', 'Sales', 'Inactive', '2025-07-29 16:45:00'),
+('Innova Systems', '1122334455', 'Finance Officer', 'Accounts', 'Active', '2025-08-01 12:15:00'),
+('DEF Tech Ltd.', '1234567880', 'Finance Officer', 'Finance', 'Active', '2025-08-05 10:30:00');
+
+-- Insert sample data into account_summaries
+INSERT INTO account_summaries (account_type, ifsc, micr, nomination, current_balance, as_on_date, statement_from, statement_to, account_id) VALUES
+('Savings', 'ABCC0001001', '123456789', 'Registered', 550000.00, '2025-08-05', '2025-08-01', '2025-08-05', 1),
+('Current', 'ABCC0002002', '987654321', 'Not Registered', 200000.00, '2025-07-29', '2025-07-20', '2025-07-29', 2),
+('Savings', 'ABCC0003003', '456789123', 'Registered', 875000.00, '2025-08-01', '2025-07-25', '2025-08-01', 3),
+('Savings', 'ABCC0001201', '123456779', 'Registered', 730999.00, '2025-08-05', '2025-08-01', '2025-08-05', 4);
+
+-- Insert sample data into transactions
+INSERT INTO transactions (transaction_date, description, reference, type, amount, balance, account_summary_id) VALUES
+('2025-08-02', 'Salary Credit', 'TXN10001', 'Credit', 50000.00, 550000.00, 1),
+('2025-08-03', 'Vendor Payment', 'TXN10002', 'Debit', 15000.00, 535000.00, 1),
+('2025-07-28', 'Invoice Payment', 'TXN30003', 'Credit', 125000.00, 875000.00, 3),
+('2025-08-02', 'Salary Credit', 'TXN10001', 'Credit', 50000.00, 550000.00, 4),
+('2025-08-03', 'Vendor Payment', 'TXN10002', 'Debit', 15000.00, 535000.00, 4);
+
+-- Verify data
+SELECT * FROM accounts;
+SELECT * FROM account_summaries;
+SELECT * FROM transactions;
