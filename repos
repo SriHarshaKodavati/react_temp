@@ -1,0 +1,63 @@
+package com.banking.controller;
+
+import com.banking.entity.Account;
+import com.banking.service.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/accounts")
+@CrossOrigin(origins = "*")
+public class AccountController {
+    
+    @Autowired
+    private AccountService accountService;
+    
+    // GET /api/accounts - Get all accounts
+    @GetMapping
+    public ResponseEntity<List<Account>> getAllAccounts() {
+        List<Account> accounts = accountService.getAllAccounts();
+        return ResponseEntity.ok(accounts);
+    }
+    
+    // GET /api/accounts/{accountNumber} - Get account by number
+    @GetMapping("/{accountNumber}")
+    public ResponseEntity<Account> getAccountByNumber(@PathVariable String accountNumber) {
+        Optional<Account> account = accountService.getAccountByNumber(accountNumber);
+        if (account.isPresent()) {
+            return ResponseEntity.ok(account.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+    
+    // GET /api/accounts/company/{companyName} - Get accounts by company
+    @GetMapping("/company/{companyName}")
+    public ResponseEntity<List<Account>> getAccountsByCompany(@PathVariable String companyName) {
+        List<Account> accounts = accountService.getAccountsByCompany(companyName);
+        return ResponseEntity.ok(accounts);
+    }
+    
+    // GET /api/accounts/status/{status} - Get accounts by status
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<Account>> getAccountsByStatus(@PathVariable String status) {
+        List<Account> accounts = accountService.getAccountsByStatus(status);
+        return ResponseEntity.ok(accounts);
+    }
+    
+    // POST /api/accounts - Create new account
+    @PostMapping
+    public ResponseEntity<Account> createAccount(@RequestBody Account account) {
+        Account savedAccount = accountService.saveAccount(account);
+        return ResponseEntity.ok(savedAccount);
+    }
+    
+    // DELETE /api/accounts/{id} - Delete account
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
+        accountService.deleteAccount(id);
+        return ResponseEntity.noContent().build();
+    }
+}
